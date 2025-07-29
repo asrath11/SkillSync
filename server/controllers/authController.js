@@ -1,7 +1,8 @@
 import User from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-export async function signup(req, res) {
+import { asyncHandler } from '../utils/asynHandler.js';
+export const signup = asyncHandler(async function (req, res) {
   const { fullName, email, password, confirmPassword } = req.body;
   if (!fullName || !email || !password || !confirmPassword) {
     return res.status(400).json({ message: 'All fields are required' });
@@ -25,17 +26,23 @@ export async function signup(req, res) {
     sameSite: 'lax',
     maxAge: 15 * 24 * 60 * 60 * 1000,
   });
-  return res
-    .status(201)
-    .json({ message: 'User created successfully', newUser, token });
-}
+  return res.status(201).json({
+    message: 'User created successfully',
+    user: {
+      _id: newUser._id,
+      fullName: newUser.fullName,
+      email: newUser.email,
+    },
+    token,
+  });
+});
 
-export async function signin(req, res) {
+export const signin = asyncHandler(async function (req, res) {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(400).json({ message: 'All fields are required' });
   }
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).select('+password');
   if (!user) {
     return res.status(400).json({ message: 'User does not exist' });
   }
@@ -52,7 +59,13 @@ export async function signin(req, res) {
     sameSite: 'lax',
     maxAge: 15 * 24 * 60 * 60 * 1000,
   });
-  return res
-    .status(200)
-    .json({ message: 'User signed in successfully', user, token });
-}
+  return res.status(200).json({
+    message: 'User signed in successfully',
+    user: {
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+    },
+    token,
+  });
+});

@@ -20,10 +20,12 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
+    select: false,
   },
   confirmPassword: {
     type: String,
     required: true,
+    select: false,
   },
   createdAt: {
     type: Date,

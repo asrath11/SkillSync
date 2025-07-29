@@ -65,11 +65,11 @@ function FeaturesSection() {
           effective and enjoyable.
         </p>
       </div>
-      <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
+      <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-8 xl:px-27 place-items-center'>
         {features.map((feature) => (
           <div
             key={feature.id}
-            className='group bg-card rounded-2xl p-8 shadow-soft hover:shadow-elevated transition-all duration-300 border border-border/50 hover:border-primary/20'
+            className='group bg-card lg:max-w-md rounded-2xl p-8 shadow-soft hover:shadow-elevated transition-all duration-300 border border-border/50 hover:border-primary/20'
           >
             {/* Icon */}
             <div

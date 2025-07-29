@@ -15,7 +15,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className='relative min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-white overflow-hidden'>
+    <section className='relative min-h-screen flex items-center justify-center overflow-hidden'>
       {/* Background Pattern */}
       <div className='absolute inset-0 opacity-5'>
         <div className='absolute top-20 left-10 w-32 h-32 bg-primary rounded-full blur-3xl'></div>
@@ -27,7 +27,7 @@ const HeroSection = () => {
         <div className='grid lg:grid-cols-2 gap-12 items-center'>
           {/* Content */}
           <div className='text-center lg:text-left'>
-            <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight'>
+            <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight'>
               Find Your Perfect
               <span className='block bg-primary bg-clip-text text-transparent'>
                 Learning Partner
@@ -52,7 +52,7 @@ const HeroSection = () => {
               </Button>
 
               <Button
-                variant='outline'
+                variant='ghost'
                 size='lg'
                 onClick={handleLearnMore}
                 className='px-8 py-4 text-lg font-semibold'

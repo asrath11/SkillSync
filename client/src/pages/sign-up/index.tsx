@@ -3,34 +3,52 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useNavigate } from 'react-router-dom';
 import { PasswordInput } from '@/components/ui/passwordInput';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 function Signup() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+  const schema = z
+    .object({
+      fullName: z
+        .string()
+        .min(3, { message: 'Full name must be at least 3 characters long' }),
+      email: z.email(),
+      password: z
+        .string()
+        .min(6, { message: 'Password must be at least 6 characters long' }),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords don't match",
+      path: ['confirmPassword'],
+    });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
   });
   const handleSignIn = () => {
     navigate('/sign-in');
   };
-  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(form);
+  const onSubmit = (data: z.infer<typeof schema>) => {
+    console.log(data);
   };
 
   return (
     <section className='h-screen flex flex-col items-center justify-center gap-4'>
       <div className='max-w-md w-full px-4 space-y-6'>
+        <Button
+          onClick={() => navigate('/')}
+          variant='ghost'
+          size='lg'
+          className='self-start cursor-pointer'
+        >
+          Go Home
+        </Button>
         <div className='flex items-center justify-center gap-2'>
           logo
           <h1 className='text-3xl font-bold'>SkillSync</h1>
@@ -42,30 +60,34 @@ function Signup() {
             Join thousands of learners finding their perfect study partners
           </p>
 
-          <form className='space-y-4' onSubmit={handleSubmit}>
+          <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
             <Input
               type='text'
               placeholder='Full Name'
-              onChange={handleChangeInput}
-              name='fullName'
+              {...register('fullName')}
             />
+            {errors.fullName && (
+              <p className='text-red-500'>{errors.fullName.message}</p>
+            )}
             <Input
               type='email'
               placeholder='Email Address'
-              onChange={handleChangeInput}
-              name='email'
+              {...register('email')}
             />
-            <PasswordInput
-              placeholder='Password'
-              onChange={handleChangeInput}
-              name='password'
-            />
+            {errors.email && (
+              <p className='text-red-500'>{errors.email.message}</p>
+            )}
+            <PasswordInput placeholder='Password' {...register('password')} />
+            {errors.password && (
+              <p className='text-red-500'>{errors.password.message}</p>
+            )}
             <PasswordInput
               placeholder='Confirm Password'
-              onChange={handleChangeInput}
-              name='confirmPassword'
+              {...register('confirmPassword')}
             />
-
+            {errors.confirmPassword && (
+              <p className='text-red-500'>{errors.confirmPassword.message}</p>
+            )}
             <div className='flex items-center gap-2'>
               <Checkbox />
               <p className='text-muted-foreground text-sm'>

@@ -4,7 +4,10 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import connectDB from './connectDb.js';
+import authRoute from './routes/authRoute.js';
 dotenv.config();
+connectDB();
 
 const app = express();
 
@@ -15,7 +18,13 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 
+//routes
+app.use('/api/v1/auth', authRoute);
+app.get('/api/v1', (req, res) => {
+  res.send('Hello World!');
+});
+
 //server
 app.listen(process.env.PORT || 3000, () => {
-  console.log('Server is running on port 3000');
+  console.log('Server is running on port http://localhost:3000');
 });

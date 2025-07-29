@@ -1,19 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useNavigate } from 'react-router-dom';
 import { PasswordInput } from '@/components/ui/passwordInput';
 import { useState } from 'react';
-function Signup() {
+function SignIn() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    fullName: '',
     email: '',
     password: '',
-    confirmPassword: '',
   });
-  const handleSignIn = () => {
-    navigate('/sign-in');
+  const handleSignUp = () => {
+    navigate('/sign-up');
   };
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,26 +26,20 @@ function Signup() {
   };
 
   return (
-    <section className='h-screen flex flex-col items-center justify-center gap-4'>
+    <section className='h-screen flex flex-col items-center justify-center'>
       <div className='max-w-md w-full px-4 space-y-6'>
-        <div className='flex items-center justify-center gap-2'>
+        <div className='flex items-center justify-center gap-x-4'>
           logo
           <h1 className='text-3xl font-bold'>SkillSync</h1>
         </div>
 
         <div className='flex flex-col gap-4'>
-          <h1 className='text-3xl font-bold text-center'>Create your account</h1>
+          <h1 className='text-3xl font-bold text-center'>Welcome back</h1>
           <p className='text-center text-muted-foreground'>
-            Join thousands of learners finding their perfect study partners
+            Sign in to your account to continue learning
           </p>
 
           <form className='space-y-4' onSubmit={handleSubmit}>
-            <Input
-              type='text'
-              placeholder='Full Name'
-              onChange={handleChangeInput}
-              name='fullName'
-            />
             <Input
               type='email'
               placeholder='Email Address'
@@ -60,35 +51,16 @@ function Signup() {
               onChange={handleChangeInput}
               name='password'
             />
-            <PasswordInput
-              placeholder='Confirm Password'
-              onChange={handleChangeInput}
-              name='confirmPassword'
-            />
-
-            <div className='flex items-center gap-2'>
-              <Checkbox />
-              <p className='text-muted-foreground text-sm'>
-                I agree to the{' '}
-                <span className='text-primary underline cursor-pointer'>
-                  Terms of Service
-                </span>{' '}
-                and{' '}
-                <span className='text-primary underline cursor-pointer'>
-                  Privacy Policy
-                </span>
-              </p>
-            </div>
 
             <Button type='submit' className='w-full font-bold'>
-              Create Account
+              Sign In
             </Button>
           </form>
 
           <p className='text-center text-muted-foreground'>
-            Already have an account?{' '}
-            <span className='text-primary cursor-pointer' onClick={handleSignIn}>
-              Sign In
+            Don't have an account?{' '}
+            <span className='text-primary cursor-pointer' onClick={handleSignUp}>
+              Sign Up
             </span>
           </p>
         </div>
@@ -97,4 +69,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default SignIn;

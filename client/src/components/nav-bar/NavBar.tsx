@@ -55,7 +55,7 @@ function NavBar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className='md:hidden'
+          className='md:hidden cursor-pointer'
           aria-label='Toggle Menu'
         >
           <MenuIconComponent size={24} />

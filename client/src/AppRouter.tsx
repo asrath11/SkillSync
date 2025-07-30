@@ -9,6 +9,10 @@ import LandingPage from './pages/landing-page';
 import NotFound from './pages/NotFound';
 import SignUp from './pages/sign-up';
 import SignIn from './pages/sign-in';
+
+//context providers
+import { AuthProvider } from './context/authProvider';
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -23,7 +27,11 @@ const router = createBrowserRouter(
 );
 
 function AppRouter() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }
 
 export default AppRouter;

@@ -2,12 +2,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
 import { PasswordInput } from '@/components/ui/passwordInput';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { signin } from '@/api/auth';
+import { useAuth } from '@/context/authProvider';
 function SignIn() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
   const schema = z.object({
     email: z.email(),
     password: z.string().min(6),
@@ -23,8 +25,19 @@ function SignIn() {
     navigate('/sign-up');
   };
 
-  const onSubmit = (data: z.infer<typeof schema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof schema>) => {
+    try {
+      const response = await signin(data);
+      console.log(response);
+      setUser(response);
+      navigate('/');
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        console.error(error.response.data.message);
+      } else {
+        console.error('Something went wrong');
+      }
+    }
   };
 
   return (

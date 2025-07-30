@@ -1,13 +1,18 @@
 import express from 'express';
-import { signup, signin } from '../controllers/authController.js';
+import { signup, signin, signout } from '../controllers/authController.js';
 import { verifyToken } from '../middlewares/verify.js';
 
 const router = express.Router();
 
 router.post('/signup', signup);
 router.post('/signin', signin);
+router.post('/signout', signout);
 router.get('/profile', verifyToken, (req, res) => {
-  return res.json(req.user);
+  return res.json({
+    id: req.user._id,
+    fullName: req.user.fullName,
+    email: req.user.email,
+  });
 });
 
 export default router;

@@ -33,14 +33,11 @@ const userSchema = new Schema({
   },
 });
 
-// Combined pre-save hook
+// Hash password before save
 userSchema.pre('save', async function () {
-  if (this.password !== this.confirmPassword) {
-    throw new Error('Passwords do not match');
-  }
-
-  this.confirmPassword = undefined;
+  if (!this.isModified('password')) return;
   this.password = await bcrypt.hash(this.password, 10);
+  this.confirmPassword = undefined;
 });
 
 export default mongoose.model('User', userSchema);

@@ -51,7 +51,7 @@ function FeaturesSection() {
     },
   ];
   return (
-    <section className='h-screen py-10 px-6' id='features-section'>
+    <section className='py-10 px-6' id='features-section'>
       <div className='text-center mb-16'>
         <h2 className='text-3xl sm:text-4xl lg:text-5xl font-bold mb-6'>
           Powerful Features for

@@ -1,8 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/authProvider';
+import ProfileButtons from './ProfileButtons';
 
 function NavBar() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleLogin = () => {
     navigate('/sign-in');
@@ -11,6 +14,17 @@ function NavBar() {
   const handleSignUp = () => {
     navigate('/sign-up');
   };
+  const AuthButtons = () => (
+    <ul className='flex gap-2'>
+      <Button variant='outline' size='lg' onClick={handleLogin}>
+        login
+      </Button>
+      <Button size='lg' onClick={handleSignUp}>
+        sign up
+      </Button>
+    </ul>
+  );
+
   return (
     <nav className='sticky top-0 z-50 border-b-1'>
       <div className='flex items-center justify-between p-4  max-w-7xl mx-auto'>
@@ -18,14 +32,7 @@ function NavBar() {
         <div className='flex items-center gap-2'>
           <h1 className='text-2xl font-bold text-primary'>SkillSync</h1>
         </div>
-        <ul className='flex gap-2'>
-          <Button variant='outline' size='lg' onClick={handleLogin}>
-            login
-          </Button>
-          <Button size='lg' onClick={handleSignUp}>
-            sign up
-          </Button>
-        </ul>
+        {user ? <ProfileButtons /> : <AuthButtons />}
       </div>
     </nav>
   );

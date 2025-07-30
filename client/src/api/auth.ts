@@ -11,25 +11,34 @@ interface signupData extends signinData {
 }
 
 export const signup = async (userData: signupData) => {
-  const response = await axios.post(`${API_URL}/auth/signup`, userData);
+  const response = await axios.post(`${API_URL}/auth/signup`, userData, {
+    withCredentials: true,
+  });
   return response.data.user;
 };
 
 export const signin = async (userData: signinData) => {
-  const response = await axios.post(`${API_URL}/auth/signin`, userData);
-  console.log(response);
+  const response = await axios.post(`${API_URL}/auth/signin`, userData, {
+    withCredentials: true,
+  });
   return response.data.user;
 };
 
 export const signout = async () => {
-  const response = await axios.post(`${API_URL}/auth/signout`);
-  console.log(response);
-  return response.data.user;
+  await axios.post(
+    `${API_URL}/auth/signout`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
 };
 
 export const getUser = async () => {
-  const response = await axios.get(`${API_URL}/auth/profile`);
-  return response.data.user;
+  const response = await axios.get(`${API_URL}/auth/profile`, {
+    withCredentials: true,
+  });
+  return response.data;
 };
 
 export const test = async () => {

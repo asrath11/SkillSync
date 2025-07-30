@@ -1,5 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { getUser } from '../api/auth';
+import { getUser, signout } from '../api/auth';
 type User = {
   fullName: string;
   email: string;
@@ -8,29 +8,40 @@ type User = {
 type AuthContextType = {
   user: User | null;
   setUser: (user: User | null) => void;
+  logout: () => void;
 };
 const AuthContext = createContext<AuthContextType>({
   user: null,
   setUser: () => {},
+  logout: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const fetchUser = async () => {
-    try {
-      const response = await getUser();
-      setUser(response);
-    } catch (e) {
-      setUser(null);
-    }
-  };
-
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUser();
+        setUser(userData);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+
     fetchUser();
   }, []);
 
+  const logout = async () => {
+    try {
+      await signout();
+      setUser(null);
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );

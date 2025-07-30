@@ -9,9 +9,8 @@ import LandingPage from './pages/landing-page';
 import NotFound from './pages/NotFound';
 import SignUp from './pages/sign-up';
 import SignIn from './pages/sign-in';
-
-//context providers
 import { AuthProvider } from './context/authProvider';
+//context providers
 
 const router = createBrowserRouter(
   createRoutesFromElements(

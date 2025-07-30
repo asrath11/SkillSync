@@ -28,7 +28,6 @@ function SignIn() {
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
       const response = await signin(data);
-      console.log(response);
       setUser(response);
       navigate('/');
     } catch (error: any) {

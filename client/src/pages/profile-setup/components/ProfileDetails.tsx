@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ProgressBar from './ProgressBar';
 import PersonalInfo from './PersonalInfo';
+import SkillsSection from './SkillsSection';
 
 const steps = [
   {
@@ -11,7 +12,13 @@ const steps = [
     desc: 'Basic Details',
     component: <PersonalInfo />,
   },
-  { id: 2, step: '2', label: 'Skills', desc: 'Your expertise' },
+  {
+    id: 2,
+    step: '2',
+    label: 'Skills',
+    desc: 'Your expertise',
+    component: <SkillsSection />,
+  },
   { id: 3, step: '3', label: 'Goals', desc: 'Learning objectives' },
   { id: 4, step: '4', label: 'Availability', desc: 'Schedule & time' },
   { id: 5, step: '5', label: 'Working Style', desc: 'Preferences' },
@@ -42,18 +49,17 @@ function ProfileDetails() {
   const current = steps[currentStep - 1];
 
   return (
-    <section className='xl:min-w-5xl p-6 mb-10 bg-white rounded-2xl shadow-lg space-y-5'>
+    <section className='xl:min-w-5xl p-6 mb-10 bg-card rounded-2xl shadow-lg space-y-5'>
       <ProgressBar percentage={percentage} currentStep={currentStep} />
 
       <section>{current.component}</section>
-
+      <div className='border border-t-1'></div>
       <div className='flex justify-between'>
         {currentStep > 1 ? (
           <Button onClick={handleBack}>Back</Button>
         ) : (
           <span /> // empty span keeps spacing consistent
         )}
-
         {currentStep < steps.length ? (
           <div className='flex items-center gap-x-2'>
             <div className='flex items-center gap-x-2'>

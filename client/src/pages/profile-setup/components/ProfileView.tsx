@@ -1,10 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Icon from '@/components/AppIcon';
 import { useProfile } from '@/context/profileProvider';
+import SkillBadge from '@/components/SkillBadge';
+import { BookOpen } from 'lucide-react';
 function ProfileView() {
   const { profile } = useProfile();
+  console.log(profile);
   return (
-    <div className='w-full bg-white p-8 space-y-2'>
+    <div className='w-full bg-card rounded-2xl p-8 space-y-3'>
       <h1 className='text-xl font-semibold text-center'>Profile Preview</h1>
       <p className='text-center text-muted-foreground'>
         This is how your profile will appear to potential partners
@@ -31,6 +34,27 @@ function ProfileView() {
           )}
           {profile.bio && <p className='text-muted-foreground'>{profile.bio}</p>}
         </div>
+      </div>
+      <div>
+        {profile.skills.length > 0 && (
+          <div className='space-y-3 overflow-y-auto max-h-65'>
+            <div className='flex items-center gap-2'>
+              <BookOpen size={24} className='text-muted-foreground' />
+              <h1 className='font-semibold'>Skills ({profile.skills.length})</h1>
+            </div>
+            {profile.skills.map((skillObj) => (
+              <div
+                key={skillObj.skill}
+                className='flex flex-col justify-between gap-2 bg-card p-3'
+              >
+                <div className='flex items-center justify-between'>
+                  <h2 className='font-semibold'>{skillObj.skill}</h2>
+                  <SkillBadge level={skillObj.level} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ function NavBar() {
     <nav className='sticky top-0 z-50 border-b'>
       <div className='flex items-center justify-between p-4 max-w-7xl mx-auto relative'>
         {/* Blur Background */}
-        <div className='absolute inset-0 z-[-1] backdrop-blur-md bg-white/70 dark:bg-black/30'></div>
+        <div className='absolute inset-0 z-[-1] backdrop-blur-md'></div>
 
         {/* Brand */}
         <h1 className='text-2xl font-bold text-primary'>SkillSync</h1>

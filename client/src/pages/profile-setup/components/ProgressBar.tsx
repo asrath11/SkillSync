@@ -15,7 +15,7 @@ function ProgressBar({
 }) {
   return (
     <>
-      <div className='min-w-full h-2 bg-gray-200 rounded-2xl flex items-center relative'>
+      <div className='min-w-full h-2 bg-gray-200 dark:bg-black/25 rounded-2xl flex items-center relative'>
         <div
           className={`h-4 w-4 border-2  border-primary rounded-full flex items-center justify-center absolute`}
           style={{ left: `${99}%` }}
@@ -57,7 +57,7 @@ function ProgressBar({
           </div>
         ))}
       </div>
-      <div className='border border-gray-200 mt-10'></div>
+      <div className='border mt-10'></div>
     </>
   );
 }

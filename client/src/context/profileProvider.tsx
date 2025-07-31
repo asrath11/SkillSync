@@ -1,13 +1,16 @@
 // context/ProfileContext.tsx
 import { createContext, useContext, useState } from 'react';
-
+type Skill = {
+  skill: string;
+  level: number;
+};
 type ProfileData = {
   image: string;
   name: string;
   country: string;
   city: string;
   bio: string;
-  skills: string[];
+  skills: Skill[];
   // Add more as needed
 };
 

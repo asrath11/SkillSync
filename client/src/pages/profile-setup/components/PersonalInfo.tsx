@@ -32,7 +32,7 @@ function PersonalInfo() {
     }
   };
   return (
-    <div className='space-y-2 px-4'>
+    <div className='space-y-5 px-4 py-2'>
       <h1 className='text-2xl font-semibold text-center'>
         Let's get to know you
       </h1>

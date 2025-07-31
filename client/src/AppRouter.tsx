@@ -5,18 +5,23 @@ import {
   Route,
 } from 'react-router-dom';
 import Layout from './components/Layout';
+
+//pages
 import LandingPage from './pages/landing-page';
 import NotFound from './pages/NotFound';
 import SignUp from './pages/sign-up';
 import SignIn from './pages/sign-in';
-import { AuthProvider } from './context/authProvider';
+import ProfileSetup from './pages/profile-setup';
+
 //context providers
+import { AuthProvider } from './context/authProvider';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path='/' element={<Layout />}>
         <Route index element={<LandingPage />} />
+        <Route path='/profile-setup' element={<ProfileSetup />} />
         <Route path='*' element={<NotFound />} />
       </Route>
       <Route path='/sign-up' element={<SignUp />} />

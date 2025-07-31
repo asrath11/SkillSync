@@ -27,7 +27,7 @@ const ProfileButtons = ({ type = 'desktop' }: ProfileButtonsProps) => {
     {
       icon: 'User',
       label: 'My Profile',
-      onClick: () => navigate('/profile'),
+      onClick: () => navigate('/profile-setup'),
     },
     {
       icon: 'MessageCircle',

@@ -10,7 +10,7 @@
   --card-foreground: oklch(0.2795 0.0368 260.031);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2795 0.0368 260.031);
-  --success: oklch(0.7 0.15 145); /* greenish for success */
+  --success: #10b981; /* greenish for success */
   --warning: oklch(0.8 0.18 85); /* yellow-orange for warning */
   --info: oklch(0.75 0.12 250); /* bluish for info */
   --error: oklch(0.6368 0.2078 25.3313); /* red for error */

@@ -15,6 +15,7 @@ import ProfileSetup from './pages/profile-setup';
 
 //context providers
 import { AuthProvider } from './context/authProvider';
+import { ProfileProvider } from './context/profileProvider';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,7 +34,9 @@ const router = createBrowserRouter(
 function AppRouter() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <ProfileProvider>
+        <RouterProvider router={router} />
+      </ProfileProvider>
     </AuthProvider>
   );
 }

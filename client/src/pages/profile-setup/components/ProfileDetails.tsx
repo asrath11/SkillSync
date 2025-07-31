@@ -42,7 +42,7 @@ function ProfileDetails() {
   const current = steps[currentStep - 1];
 
   return (
-    <section className='w-5xl p-6 bg-white rounded-2xl shadow-lg space-y-5'>
+    <section className='xl:min-w-5xl p-6 mb-10 bg-white rounded-2xl shadow-lg space-y-5'>
       <ProgressBar percentage={percentage} currentStep={currentStep} />
 
       <section>{current.component}</section>
@@ -55,7 +55,13 @@ function ProfileDetails() {
         )}
 
         {currentStep < steps.length ? (
-          <Button onClick={handleNext}>Next</Button>
+          <div className='flex items-center gap-x-2'>
+            <div className='flex items-center gap-x-2'>
+              <div className='w-2 h-2 rounded-full bg-success'></div>
+              <h1 className='text-sm text-muted-foreground'>Auto-saved</h1>
+            </div>
+            <Button onClick={handleNext}>Next</Button>
+          </div>
         ) : (
           <Button onClick={handleSubmit}>Submit</Button>
         )}

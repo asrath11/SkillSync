@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import ProgressBar from './ProgressBar';
 import PersonalInfo from './PersonalInfo';
 import SkillsSection from './SkillsSection';
+import GoalsSection from './GoalsSection';
+import WorkingStyleSection from './WorkingStyle';
 
 const steps = [
   {
@@ -19,9 +21,15 @@ const steps = [
     desc: 'Your expertise',
     component: <SkillsSection />,
   },
-  { id: 3, step: '3', label: 'Goals', desc: 'Learning objectives' },
+  {
+    id: 3,
+    step: '3',
+    label: 'Goals',
+    desc: 'Learning objectives',
+    component: <GoalsSection />,
+  },
   { id: 4, step: '4', label: 'Availability', desc: 'Schedule & time' },
-  { id: 5, step: '5', label: 'Working Style', desc: 'Preferences' },
+  { id: 5, step: '5', label: 'Working Style', desc: 'Preferences' , component: <WorkingStyleSection />},
 ];
 
 function ProfileDetails() {

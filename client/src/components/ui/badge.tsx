@@ -14,13 +14,13 @@ const badgeVariants = cva(
         secondary:
           'border-transparent bg-gray-100 text-gray-700 [a&]:hover:bg-gray-100/90',
         destructive:
-          'border-transparent bg-orange-100 text-orange-700 [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+          'border-transparent bg-orange-100 text-orange-700 dark:text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
         outline:
           'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
         success:
-          'border-transparent bg-green-100 text-green-700 [a&]:hover:bg-success/90 focus-visible:ring-success/20 dark:focus-visible:ring-success/40 dark:bg-success/60',
+          'border-transparent bg-green-100 text-green-700 dark:text-white [a&]:hover:bg-success/90 focus-visible:ring-success/20 dark:focus-visible:ring-success/40 dark:bg-success/60',
         warning:
-          'border-transparent bg-yellow-100 text-amber-700 [a&]:hover:bg-warning/90 focus-visible:ring-warning/20 dark:focus-visible:ring-warning/40 dark:bg-warning/60',
+          'border-transparent bg-yellow-100 text-amber-700 dark:text-white [a&]:hover:bg-warning/90 focus-visible:ring-warning/20 dark:focus-visible:ring-warning/40 dark:bg-warning/60',
         info: 'border-transparent bg-blue-100 text-blue-700 [a&]:hover:bg-primary/90',
       },
     },

@@ -11,7 +11,14 @@ type ProfileData = {
   city: string;
   bio: string;
   skills: Skill[];
-  // Add more as needed
+  learningGoals: string;
+  learningCategories: string[];
+  learningTimeFrame: string;
+  successCriteria: string;
+  workingStyle: string;
+  preferredCommunication: string;
+  learningStyle: string;
+  projectPreference: string;
 };
 
 type ProfileContextType = {
@@ -29,6 +36,14 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
     city: '',
     bio: '',
     skills: [],
+    learningGoals: '',
+    learningCategories: [],
+    learningTimeFrame: '',
+    successCriteria: '',
+    workingStyle: '',
+    preferredCommunication: '',
+    learningStyle: '',
+    projectPreference: '',
   });
 
   return (

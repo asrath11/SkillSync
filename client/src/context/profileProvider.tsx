@@ -15,6 +15,7 @@ type ProfileData = {
   learningCategories: string[];
   learningTimeFrame: string;
   successCriteria: string;
+  availability: string[];
   workingStyle: string;
   preferredCommunication: string;
   learningStyle: string;
@@ -40,6 +41,7 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
     learningCategories: [],
     learningTimeFrame: '',
     successCriteria: '',
+    availability: [],
     workingStyle: '',
     preferredCommunication: '',
     learningStyle: '',

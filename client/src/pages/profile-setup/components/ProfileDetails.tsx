@@ -5,31 +5,43 @@ import PersonalInfo from './PersonalInfo';
 import SkillsSection from './SkillsSection';
 import GoalsSection from './GoalsSection';
 import WorkingStyleSection from './WorkingStyle';
-
+import Availability from './Availability';
 const steps = [
   {
     id: 1,
     step: '1',
     label: 'Personal info',
     desc: 'Basic Details',
-    component: <PersonalInfo />,
+    component: PersonalInfo,
   },
   {
     id: 2,
     step: '2',
     label: 'Skills',
     desc: 'Your expertise',
-    component: <SkillsSection />,
+    component: SkillsSection,
   },
   {
     id: 3,
     step: '3',
     label: 'Goals',
     desc: 'Learning objectives',
-    component: <GoalsSection />,
+    component: GoalsSection,
   },
-  { id: 4, step: '4', label: 'Availability', desc: 'Schedule & time' },
-  { id: 5, step: '5', label: 'Working Style', desc: 'Preferences' , component: <WorkingStyleSection />},
+  {
+    id: 4,
+    step: '4',
+    label: 'Availability',
+    desc: 'Schedule & time',
+    component: Availability,
+  },
+  {
+    id: 5,
+    step: '5',
+    label: 'Working Style',
+    desc: 'Preferences',
+    component: WorkingStyleSection,
+  },
 ];
 
 function ProfileDetails() {
@@ -55,12 +67,15 @@ function ProfileDetails() {
   };
 
   const current = steps[currentStep - 1];
+  const CurrentComponent = current.component;
 
   return (
     <section className='xl:min-w-5xl p-6 mb-10 bg-card rounded-2xl shadow-lg space-y-5'>
       <ProgressBar percentage={percentage} currentStep={currentStep} />
 
-      <section>{current.component}</section>
+      <section>
+        <CurrentComponent />
+      </section>
       <div className='border border-t-1'></div>
       <div className='flex justify-between'>
         {currentStep > 1 ? (

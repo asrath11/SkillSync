@@ -34,9 +34,9 @@ function ProgressBar({
             className='flex flex-col items-center justify-center gap-2'
           >
             <p
-              className={`text-lg w-8 h-8 rounded-full flex items-center justify-center bg-gray-200 ${
+              className={`text-lg w-8 h-8 rounded-full flex items-center justify-center bg-gray-200 dark:bg-gray-700 ${
                 currentStep === step.id ? 'bg-primary text-white' : ''
-              } ${currentStep > step.id ? 'bg-success' : ''}`}
+              } ${currentStep > step.id ? 'bg-success dark:bg-success' : ''}`}
             >
               {currentStep > step.id ? (
                 <Icon name='Check' size={16} className='text-white' />

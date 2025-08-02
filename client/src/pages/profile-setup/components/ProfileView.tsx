@@ -5,7 +5,6 @@ import SkillBadge from '@/components/SkillBadge';
 import { BookOpen } from 'lucide-react';
 function ProfileView() {
   const { profile } = useProfile();
-  console.log(profile);
   return (
     <div className='w-full bg-card rounded-2xl p-8 space-y-3'>
       <h1 className='text-xl font-semibold text-center'>Profile Preview</h1>

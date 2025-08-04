@@ -1,9 +1,7 @@
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import OptionSelector from '@/components/OptionSelector';
-import { useProfile } from '@/context/profileProvider';
-import type { ValidationError } from '@/types/profile';
-import { ValidationErrorDisplay } from '@/components/ui/validation-error';
+import type { ProfileData } from '@/types/profile';
 
 const categories = [
   {
@@ -68,26 +66,21 @@ const learningTimeFrame = [
 ];
 
 interface GoalsSectionProps {
-  validationErrors?: ValidationError[];
+  data: ProfileData;
+  errors: Record<string, string>;
+  onUpdate: (stepData: ProfileData) => void;
 }
 
-function GoalsSection({ validationErrors = [] }: GoalsSectionProps) {
-  const { profile, setProfile } = useProfile();
-  console.log(validationErrors)
+function GoalsSection({ data, errors, onUpdate }: GoalsSectionProps) {
   const toggleCategory = (category: string) => {
-    setProfile((prev) => ({
-      ...prev,
-      learningCategories: prev.learningCategories.includes(category)
-        ? prev.learningCategories.filter((item) => item !== category)
-        : [...prev.learningCategories, category],
-    }));
+    const newCategories = data.learningCategories?.includes(category)
+      ? data.learningCategories.filter((item: string) => item !== category)
+      : [...(data.learningCategories || []), category];
+    onUpdate({ ...data, learningCategories: newCategories });
   };
 
   const handleTimeFrameChange = (timeFrame: string) => {
-    setProfile((prev) => ({
-      ...prev,
-      learningTimeFrame: timeFrame,
-    }));
+    onUpdate({ ...data, learningTimeFrame: timeFrame });
   };
 
   return (
@@ -106,15 +99,13 @@ function GoalsSection({ validationErrors = [] }: GoalsSectionProps) {
         </Label>
         <Textarea
           id='short-term-goals'
-          value={profile.learningGoals}
+          value={data.learningGoals || ''}
           maxLength={300}
-          onChange={(e) =>
-            setProfile({ ...profile, learningGoals: e.target.value })
-          }
+          onChange={(e) => onUpdate({ ...data, learningGoals: e.target.value })}
           className='min-h-[120px]'
         />
         <p className='text-right text-sm text-muted-foreground'>
-          {profile.learningGoals.length}/300
+          {(data.learningGoals || '').length}/300
         </p>
       </div>
 
@@ -129,7 +120,7 @@ function GoalsSection({ validationErrors = [] }: GoalsSectionProps) {
 
       <OptionSelector
         options={categories}
-        selectedOptions={profile.learningCategories}
+        selectedOptions={data.learningCategories || []}
         toggleOption={toggleCategory}
         className='grid lg:grid-cols-2 gap-4'
         type='checkbox'
@@ -147,10 +138,11 @@ function GoalsSection({ validationErrors = [] }: GoalsSectionProps) {
           <label
             key={timeFrame.id}
             htmlFor={timeFrame.id}
-            className={`flex items-center justify-between gap-2 cursor-pointer transition-all h-12 p-4 rounded-md border ${profile.learningTimeFrame === timeFrame.id
-              ? 'border-primary bg-primary/10'
-              : 'border-gray-100 dark:border-black/25'
-              }`}
+            className={`flex items-center justify-between gap-2 cursor-pointer transition-all h-12 p-4 rounded-md border ${
+              data.learningTimeFrame === timeFrame.id
+                ? 'border-primary bg-primary/10'
+                : 'border-gray-100 dark:border-black/25'
+            }`}
           >
             <span className='text-md font-semibold'>{timeFrame.title}</span>
             <div className='relative'>
@@ -159,7 +151,7 @@ function GoalsSection({ validationErrors = [] }: GoalsSectionProps) {
                 id={timeFrame.id}
                 name='time-frame'
                 value={timeFrame.id}
-                checked={profile.learningTimeFrame === timeFrame.id}
+                checked={data.learningTimeFrame === timeFrame.id}
                 onChange={() => handleTimeFrameChange(timeFrame.id)}
                 className='peer hidden'
               />
@@ -174,18 +166,24 @@ function GoalsSection({ validationErrors = [] }: GoalsSectionProps) {
         </Label>
         <Textarea
           id='short-term-goals'
-          value={profile.successCriteria}
+          value={data.successCriteria || ''}
           maxLength={300}
-          onChange={(e) =>
-            setProfile({ ...profile, successCriteria: e.target.value })
-          }
+          onChange={(e) => onUpdate({ ...data, successCriteria: e.target.value })}
           className='min-h-[120px]'
         />
         <p className='text-right text-sm text-muted-foreground'>
-          {profile.successCriteria.length}/300
+          {(data.successCriteria || '').length}/300
         </p>
       </div>
-      <ValidationErrorDisplay errors={validationErrors} />
+      {Object.keys(errors).length > 0 && (
+        <div className='space-y-1'>
+          {Object.entries(errors).map(([field, message]) => (
+            <p key={field} className='text-sm text-destructive'>
+              {message}
+            </p>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

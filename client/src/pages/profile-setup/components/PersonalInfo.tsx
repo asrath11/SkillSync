@@ -1,19 +1,23 @@
 import { useRef, useState } from 'react';
 import Icon from '@/components/AppIcon';
 import { Button } from '@/components/ui/button';
-import { useProfile } from '@/context/profileProvider';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ValidationErrorDisplay } from '@/components/ui/validation-error';
-import type { ValidationError } from '@/types/profile';
+import type { ProfileData } from '@/types/profile';
 interface PersonalInfoProps {
-  validationErrors?: ValidationError[];
+  data: ProfileData;
+  errors: Record<string, string>;
+  onUpdate: (stepData: ProfileData) => void;
 }
 
-function PersonalInfo({ validationErrors = [] }: PersonalInfoProps) {
-  const [bio, setBio] = useState('');
-  const { profile, setProfile } = useProfile();
+function PersonalInfo({ data, errors, onUpdate }: PersonalInfoProps) {
+  const [bio, setBio] = useState(data.bio || '');
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    onUpdate({ ...data, [name]: value });
+  };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('image/')) {
@@ -21,20 +25,20 @@ function PersonalInfo({ validationErrors = [] }: PersonalInfoProps) {
       reader.onload = (event) => {
         const result = event.target?.result;
         if (result) {
-          setProfile((prev) => ({ ...prev, image: result as string }));
+          onUpdate({ ...data, image: result as string });
         }
       };
       reader.readAsDataURL(file);
     }
   };
   const removeImage = () => {
-    setProfile((prev) => ({ ...prev, image: '' }));
+    onUpdate({ ...data, image: '' });
   };
   const handleBioInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     if (value.length <= 300) {
       setBio(value);
-      setProfile((prev) => ({ ...prev, bio: value }));
+      onUpdate({ ...data, bio: value });
     }
   };
   return (
@@ -48,13 +52,14 @@ function PersonalInfo({ validationErrors = [] }: PersonalInfoProps) {
       <h1 className='font-semibold'>Profile Picture</h1>
       <div className='flex flex-col items-center justify-center gap-4'>
         <div
-          className={`w-32 h-32 border-dashed relative border-2 rounded-full flex items-center justify-center cursor-pointer hover:border-primary ${profile.image ? 'border-none' : ''
-            }`}
+          className={`w-32 h-32 border-dashed relative border-2 rounded-full flex items-center justify-center cursor-pointer hover:border-primary ${
+            data.image ? 'border-none' : ''
+          }`}
         >
-          {profile.image ? (
+          {data.image ? (
             <div className=''>
               <img
-                src={profile.image}
+                src={data.image}
                 alt='Profile'
                 className='w-full h-full object-cover rounded-full absolute top-0 left-0'
               />
@@ -96,30 +101,26 @@ function PersonalInfo({ validationErrors = [] }: PersonalInfoProps) {
           Max file size: 5MB. Supported: JPG, PNG, GIF
         </p>
       </div>
-      <h1>
-        Full Name <span className='text-red-500'>*</span>
-      </h1>
       <Input
-        type='text'
+        name='name'
+        label='Full Name'
+        required={true}
+        value={data.name || ''}
+        onChange={handleInputChange}
+        error={errors.name}
         placeholder='Enter your full name'
-        value={profile.name}
-        onChange={(e) =>
-          setProfile((prev) => ({ ...prev, name: e.target.value }))
-        }
-        className={validationErrors.some(e => e.field === 'name') ? 'border-destructive' : ''}
       />
-      <ValidationErrorDisplay errors={validationErrors} field="name" />
       <h1>Bio</h1>
       <div className='relative'>
         <Textarea
           placeholder='Please Tell us about yourself and what you are learning for'
-          className={`h-20 ${validationErrors.some(e => e.field === 'bio') ? 'border-destructive' : ''}`}
-          value={profile.bio}
+          className={`h-20 ${errors.bio ? 'border-destructive' : ''}`}
+          value={data.bio}
           onChange={(e) => {
             handleBioInputChange(e);
           }}
         />
-        <ValidationErrorDisplay errors={validationErrors} field="bio" />
+        {errors.bio && <p className='text-sm text-destructive'>{errors.bio}</p>}
         <p className='absolute bottom-0 right-0 p-2 text-xs text-muted-foreground'>
           {bio.length}/300
         </p>
@@ -129,20 +130,17 @@ function PersonalInfo({ validationErrors = [] }: PersonalInfoProps) {
           <h1>City</h1>
           <Input
             placeholder='City'
-            value={profile.city}
-            onChange={(e) =>
-              setProfile((prev) => ({ ...prev, city: e.target.value }))
-            }
+            name='city'
+            value={data.city}
+            onChange={handleInputChange}
           />
         </div>
         <div className='flex flex-col justify-center gap-2 flex-1'>
           <h1>Country</h1>
           <Input
             placeholder='Country'
-            value={profile.country}
-            onChange={(e) =>
-              setProfile((prev) => ({ ...prev, country: e.target.value }))
-            }
+            value={data.country}
+            onChange={handleInputChange}
           />
         </div>
       </div>

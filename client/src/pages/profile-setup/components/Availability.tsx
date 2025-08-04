@@ -1,8 +1,5 @@
 import Select from '@/components/Select';
-import { useProfile } from '@/context/profileProvider';
 import AppIcon from '@/components/AppIcon';
-import { ValidationErrorDisplay } from '@/components/ui/validation-error';
-import type { ValidationError } from '@/types/profile';
 const timezones = [
   { value: 'UTC-8', label: 'Pacific Time (UTC-8)' },
   { value: 'UTC-7', label: 'Mountain Time (UTC-7)' },
@@ -40,24 +37,21 @@ const timeSlots = [
 ];
 
 interface AvailabilityProps {
-  validationErrors?: ValidationError[];
+  data: any;
+  errors: Record<string, string>;
+  onUpdate: (stepData: Record<string, any>) => void;
 }
 
-function Availability({ validationErrors = [] }: AvailabilityProps) {
-  const { profile, setProfile } = useProfile();
+function Availability({ data, errors, onUpdate }: AvailabilityProps) {
   const toggleAvailability = (day: string, slot: string) => {
-    setProfile({
-      ...profile,
-      availability: profile.availability.includes(`${day} ${slot}`)
-        ? profile.availability.filter((d) => d !== `${day} ${slot}`)
-        : [...profile.availability, `${day} ${slot}`],
-    });
+    const currentAvailability = data.availability || [];
+    const newAvailability = currentAvailability.includes(`${day} ${slot}`)
+      ? currentAvailability.filter((d: string) => d !== `${day} ${slot}`)
+      : [...currentAvailability, `${day} ${slot}`];
+    onUpdate({ availability: newAvailability });
   };
   const clearAvailability = () => {
-    setProfile({
-      ...profile,
-      availability: [],
-    });
+    onUpdate({ availability: [] });
   };
   const handleWeekdays = () => {
     const weekdaysSlots = timeSlots
@@ -69,10 +63,7 @@ function Availability({ validationErrors = [] }: AvailabilityProps) {
     const daySlot = Weekdays.map((day) =>
       weekdaysSlots.map((slot) => `${day} ${slot}`)
     ).flat();
-    setProfile({
-      ...profile,
-      availability: [...daySlot],
-    });
+    onUpdate({ availability: [...daySlot] });
   };
   const handleWeekends = () => {
     const weekendsSlots = timeSlots.map((slot) => `${slot.id}`);
@@ -82,10 +73,7 @@ function Availability({ validationErrors = [] }: AvailabilityProps) {
     const daySlot = Weekends.map((day) =>
       weekendsSlots.map((slot) => `${day} ${slot}`)
     ).flat();
-    setProfile({
-      ...profile,
-      availability: [...daySlot],
-    });
+    onUpdate({ availability: [...daySlot] });
   };
   const handleEvenings = () => {
     const eveningsSlots = timeSlots
@@ -95,10 +83,7 @@ function Availability({ validationErrors = [] }: AvailabilityProps) {
     const daySlot = Weekends.map((day) =>
       eveningsSlots.map((slot) => `${day} ${slot}`)
     ).flat();
-    setProfile({
-      ...profile,
-      availability: [...daySlot],
-    });
+    onUpdate({ availability: [...daySlot] });
   };
   return (
     <section className='space-y-5'>
@@ -139,13 +124,13 @@ function Availability({ validationErrors = [] }: AvailabilityProps) {
                   <td
                     key={day.id}
                     className={
-                      profile.availability.includes(`${day.id} ${slot.id}`)
+                      (data.availability || []).includes(`${day.id} ${slot.id}`)
                         ? 'bg-primary text-primary-foreground'
                         : 'border border-gray-300 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer'
                     }
                     onClick={() => toggleAvailability(day.id, slot.id)}
                   >
-                    {profile.availability.includes(`${day.id} ${slot.id}`) ? (
+                    {(data.availability || []).includes(`${day.id} ${slot.id}`) ? (
                       <AppIcon name='Check' size={20} />
                     ) : (
                       ''
@@ -184,7 +169,13 @@ function Availability({ validationErrors = [] }: AvailabilityProps) {
           Clear All
         </button>
       </div>
-      <ValidationErrorDisplay errors={validationErrors} />
+      {Object.keys(errors).length > 0 && (
+        <div className="space-y-1">
+          {Object.entries(errors).map(([field, message]) => (
+            <p key={field} className="text-sm text-destructive">{message}</p>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

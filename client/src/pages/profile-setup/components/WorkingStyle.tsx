@@ -101,11 +101,12 @@ const projectPreferences = [
 ];
 
 interface WorkingStyleSectionProps {
-  validationErrors?: ValidationError[];
+  data: any;
+  errors: Record<string, string>;
+  onUpdate: (stepData: Record<string, any>) => void;
 }
 
-function WorkingStyleSection({ validationErrors = [] }: WorkingStyleSectionProps) {
-  const { profile, setProfile } = useProfile();
+function WorkingStyleSection({ data, errors, onUpdate }: WorkingStyleSectionProps) {
   return (
     <section className='space-y-4'>
       <h1 className='text-2xl font-semibold text-center'>
@@ -120,17 +121,17 @@ function WorkingStyleSection({ validationErrors = [] }: WorkingStyleSectionProps
       </h1>
       <OptionSelector
         options={workingStyles}
-        selectedOptions={profile.workingStyle}
-        toggleOption={(label) => setProfile({ ...profile, workingStyle: label })}
+        selectedOptions={data.workingStyle}
+        toggleOption={(label) => onUpdate({ workingStyle: label })}
         type='radio'
         className='flex flex-col gap-4'
       />
       <h1 className='text-md font-semibold'>Communication Preferences</h1>
       <OptionSelector
         options={communicationStyles}
-        selectedOptions={profile.preferredCommunication}
+        selectedOptions={data.preferredCommunication}
         toggleOption={(label) =>
-          setProfile({ ...profile, preferredCommunication: label })
+          onUpdate({ preferredCommunication: label })
         }
         type='radio'
         className='flex flex-col gap-4'
@@ -138,22 +139,28 @@ function WorkingStyleSection({ validationErrors = [] }: WorkingStyleSectionProps
       <h1 className='text-md font-semibold'>Learning Styles</h1>
       <OptionSelector
         options={learningStyles}
-        selectedOptions={profile.learningStyle}
-        toggleOption={(label) => setProfile({ ...profile, learningStyle: label })}
+        selectedOptions={data.learningStyle}
+        toggleOption={(label) => onUpdate({ learningStyle: label })}
         type='radio'
         className='flex flex-col gap-4'
       />
       <h1 className='text-md font-semibold'>Project Preferences</h1>
       <OptionSelector
         options={projectPreferences}
-        selectedOptions={profile.projectPreference}
+        selectedOptions={data.projectPreference}
         toggleOption={(label) =>
-          setProfile({ ...profile, projectPreference: label })
+          onUpdate({ projectPreference: label })
         }
         type='radio'
         className='flex flex-col gap-4'
       />
-      <ValidationErrorDisplay errors={validationErrors} />
+      {Object.keys(errors).length > 0 && (
+        <div className="space-y-1">
+          {Object.entries(errors).map(([field, message]) => (
+            <p key={field} className="text-sm text-destructive">{message}</p>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

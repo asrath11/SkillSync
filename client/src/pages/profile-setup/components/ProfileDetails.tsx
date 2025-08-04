@@ -7,8 +7,7 @@ import GoalsSection from './GoalsSection';
 import WorkingStyleSection from './WorkingStyle';
 import Availability from './Availability';
 import { useProfile } from '@/context/profileProvider';
-import { validateStep } from '@/lib/validation';
-import type { ValidationError } from '@/types/profile';
+import type { ProfileData } from '@/types/profile';
 
 const steps = [
   {
@@ -49,46 +48,150 @@ const steps = [
 ];
 
 function ProfileDetails() {
+  const { profile, setProfile } = useProfile();
   const [currentStep, setCurrentStep] = useState(1);
-  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
-  const { profile } = useProfile();
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const percentage = ((currentStep - 1) / (steps.length - 1)) * 100;
 
-  const handleNext = () => {
-    // Validate current step before proceeding
-    const validation = validateStep(currentStep, profile);
+  // Field validation function
+  const isFieldValid = (field: string, value: any): boolean => {
+    switch (field) {
+      case 'name':
+        return value && value.trim().length >= 4;
+      case 'bio':
+        return !value || (value.length >= 10 && value.length <= 300);
+      case 'skills':
+        return Array.isArray(value) && value.length > 0;
+      case 'learningGoals':
+        return value && value.trim().length >= 50;
+      case 'learningCategories':
+        return Array.isArray(value) && value.length > 0;
+      case 'learningTimeFrame':
+        return value && value.trim().length > 0;
+      case 'availability':
+        return Array.isArray(value) && value.length > 0;
+      case 'workingStyle':
+        return value && value.trim().length > 0;
+      case 'preferredCommunication':
+        return value && value.trim().length > 0;
+      case 'learningStyle':
+        return value && value.trim().length > 0;
+      case 'projectPreference':
+        return value && value.trim().length > 0;
+      default:
+        return true;
+    }
+  };
 
-    if (!validation.isValid) {
-      setValidationErrors(validation.errors);
-      return;
+  // Handle data updates and clear errors for valid fields
+  const handleDataUpdate = (data: ProfileData) => {
+    // Update profile data using the context
+    setProfile((prev) => ({ ...prev, ...data }));
+
+    // Clear errors for updated fields that are now valid
+    const updatedFields = Object.keys(data);
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      updatedFields.forEach((field) => {
+        if (isFieldValid(field, data[field])) {
+          delete newErrors[field];
+        }
+      });
+
+      return newErrors;
+    });
+  };
+
+  // Step validation function
+  const validateStep = (step: number): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    switch (step) {
+      case 1: // Personal Info
+        if (!profile.name?.trim()) {
+          newErrors.name = 'Full name is required';
+        } else if (profile.name.trim().length < 4) {
+          newErrors.name = 'Full name must be at least 4 characters';
+        }
+        if (profile.bio && profile.bio.length < 10) {
+          newErrors.bio = 'Bio must be at least 10 characters';
+        }
+        break;
+
+      case 2: // Skills
+        if (!profile.skills || profile.skills.length === 0) {
+          newErrors.skills = 'At least one skill is required';
+        }
+        break;
+
+      case 3: // Goals
+        if (!profile.learningGoals?.trim()) {
+          newErrors.learningGoals = 'Learning goals are required';
+        } else if (profile.learningGoals.trim().length < 50) {
+          newErrors.learningGoals =
+            'Learning goals must be at least 50 characters';
+        }
+        if (
+          !profile.learningCategories ||
+          profile.learningCategories.length === 0
+        ) {
+          newErrors.learningCategories =
+            'At least one learning category is required';
+        }
+        if (!profile.learningTimeFrame) {
+          newErrors.learningTimeFrame = 'Learning timeframe is required';
+        }
+        break;
+
+      case 4: // Availability
+        if (!profile.availability || profile.availability.length === 0) {
+          newErrors.availability = 'At least one availability option is required';
+        }
+        break;
+
+      case 5: // Working Style
+        if (!profile.workingStyle) {
+          newErrors.workingStyle = 'Working style preference is required';
+        }
+        if (!profile.preferredCommunication) {
+          newErrors.preferredCommunication =
+            'Communication preference is required';
+        }
+        if (!profile.learningStyle) {
+          newErrors.learningStyle = 'Learning style is required';
+        }
+        if (!profile.projectPreference) {
+          newErrors.projectPreference = 'Project preference is required';
+        }
+        break;
+
+      default:
+        break;
     }
 
-    // Clear validation errors if validation passes
-    setValidationErrors([]);
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-    if (currentStep < steps.length) {
-      setCurrentStep((prev) => prev + 1);
+  const handleNext = () => {
+    if (validateStep(currentStep)) {
+      if (currentStep < steps.length) {
+        setCurrentStep((prev) => prev + 1);
+      } else {
+        handleSubmit();
+      }
     }
   };
 
   const handleBack = () => {
-    // Clear validation errors when going back
-    setValidationErrors([]);
-
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
     }
   };
 
   const handleSubmit = () => {
-    // Validate the final step before submitting
-    const validation = validateStep(currentStep, profile);
-
-    if (!validation.isValid) {
-      setValidationErrors(validation.errors);
-      return;
-    }
+    if (!validateStep(currentStep)) return;
 
     console.log('Form submitted', profile);
     // Add your submit logic here
@@ -102,7 +205,11 @@ function ProfileDetails() {
       <ProgressBar percentage={percentage} currentStep={currentStep} />
 
       <section>
-        <CurrentComponent validationErrors={validationErrors} />
+        <CurrentComponent
+          data={profile}
+          errors={errors}
+          onUpdate={handleDataUpdate}
+        />
       </section>
       <div className='border border-t-1'></div>
       <div className='flex justify-between'>

@@ -27,13 +27,14 @@ type Skill = {
 };
 
 interface SkillsSectionProps {
-  validationErrors?: ValidationError[];
+  data: any;
+  errors: Record<string, string>;
+  onUpdate: (stepData: Record<string, any>) => void;
 }
 
-function SkillsSection({ validationErrors = [] }: SkillsSectionProps) {
+function SkillsSection({ data, errors, onUpdate }: SkillsSectionProps) {
   const [search, setSearch] = useState('');
-  const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
-  const { profile, setProfile } = useProfile();
+  const [selectedSkills, setSelectedSkills] = useState<Skill[]>(data.skills || []);
 
   const filteredSkills = skillsList.filter(
     (skill) =>
@@ -44,20 +45,14 @@ function SkillsSection({ validationErrors = [] }: SkillsSectionProps) {
   const handleAddSkill = (skill: string) => {
     const newSkills = [...selectedSkills, { skill, level: 1 }];
     setSelectedSkills(newSkills);
-    setProfile((prev) => ({
-      ...prev,
-      skills: newSkills,
-    }));
+    onUpdate({ skills: newSkills });
     setSearch('');
   };
 
   const handleRemoveSkill = (skillToRemove: string) => {
     const newSkills = selectedSkills.filter((s) => s.skill !== skillToRemove);
     setSelectedSkills(newSkills);
-    setProfile((prev) => ({
-      ...prev,
-      skills: newSkills,
-    }));
+    onUpdate({ skills: newSkills });
   };
 
   const handleSetLevel = (skillName: string, level: number) => {
@@ -65,10 +60,7 @@ function SkillsSection({ validationErrors = [] }: SkillsSectionProps) {
       s.skill === skillName ? { ...s, level } : s
     );
     setSelectedSkills(newSkills);
-    setProfile((prev) => ({
-      ...prev,
-      skills: newSkills,
-    }));
+    onUpdate({ skills: newSkills });
   };
   return (
     <section className='space-y-5'>
@@ -104,7 +96,7 @@ function SkillsSection({ validationErrors = [] }: SkillsSectionProps) {
         )}
       </div>
       {/* Added skills by button if selectedSkills empty */}
-      {profile.skills.length === 0 && (
+      {selectedSkills.length === 0 && (
         <div className='space-y-3 h-60 p-4 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center'>
           <BookOpen size={40} className='mx-auto text-muted-foreground' />
           <p className='text-center font-semibold text-lg'>No skills added yet</p>
@@ -173,7 +165,7 @@ function SkillsSection({ validationErrors = [] }: SkillsSectionProps) {
           </div>
         </>
       )}
-      <ValidationErrorDisplay errors={validationErrors} field='skills' />
+      {errors.skills && <p className="text-sm text-destructive">{errors.skills}</p>}
     </section>
   );
 }

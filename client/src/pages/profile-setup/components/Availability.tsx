@@ -1,6 +1,8 @@
 import Select from '@/components/Select';
 import { useProfile } from '@/context/profileProvider';
 import AppIcon from '@/components/AppIcon';
+import { ValidationErrorDisplay } from '@/components/ui/validation-error';
+import type { ValidationError } from '@/types/profile';
 const timezones = [
   { value: 'UTC-8', label: 'Pacific Time (UTC-8)' },
   { value: 'UTC-7', label: 'Mountain Time (UTC-7)' },
@@ -37,7 +39,11 @@ const timeSlots = [
   { id: 'night', label: 'Night', time: '8:00 - 11:00 PM' },
 ];
 
-function Availability() {
+interface AvailabilityProps {
+  validationErrors?: ValidationError[];
+}
+
+function Availability({ validationErrors = [] }: AvailabilityProps) {
   const { profile, setProfile } = useProfile();
   const toggleAvailability = (day: string, slot: string) => {
     setProfile({
@@ -178,6 +184,7 @@ function Availability() {
           Clear All
         </button>
       </div>
+      <ValidationErrorDisplay errors={validationErrors} />
     </section>
   );
 }

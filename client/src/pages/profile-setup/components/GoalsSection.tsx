@@ -2,6 +2,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import OptionSelector from '@/components/OptionSelector';
 import { useProfile } from '@/context/profileProvider';
+import type { ValidationError } from '@/types/profile';
+import { ValidationErrorDisplay } from '@/components/ui/validation-error';
 
 const categories = [
   {
@@ -65,9 +67,13 @@ const learningTimeFrame = [
   },
 ];
 
-function GoalsSection() {
-  const { profile, setProfile } = useProfile();
+interface GoalsSectionProps {
+  validationErrors?: ValidationError[];
+}
 
+function GoalsSection({ validationErrors = [] }: GoalsSectionProps) {
+  const { profile, setProfile } = useProfile();
+  console.log(validationErrors)
   const toggleCategory = (category: string) => {
     setProfile((prev) => ({
       ...prev,
@@ -141,11 +147,10 @@ function GoalsSection() {
           <label
             key={timeFrame.id}
             htmlFor={timeFrame.id}
-            className={`flex items-center justify-between gap-2 cursor-pointer transition-all h-12 p-4 rounded-md border ${
-              profile.learningTimeFrame === timeFrame.id
-                ? 'border-primary bg-primary/10'
-                : 'border-gray-100 dark:border-black/25'
-            }`}
+            className={`flex items-center justify-between gap-2 cursor-pointer transition-all h-12 p-4 rounded-md border ${profile.learningTimeFrame === timeFrame.id
+              ? 'border-primary bg-primary/10'
+              : 'border-gray-100 dark:border-black/25'
+              }`}
           >
             <span className='text-md font-semibold'>{timeFrame.title}</span>
             <div className='relative'>
@@ -176,7 +181,11 @@ function GoalsSection() {
           }
           className='min-h-[120px]'
         />
+        <p className='text-right text-sm text-muted-foreground'>
+          {profile.successCriteria.length}/300
+        </p>
       </div>
+      <ValidationErrorDisplay errors={validationErrors} />
     </section>
   );
 }

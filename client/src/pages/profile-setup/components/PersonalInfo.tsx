@@ -4,7 +4,13 @@ import { Button } from '@/components/ui/button';
 import { useProfile } from '@/context/profileProvider';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-function PersonalInfo() {
+import { ValidationErrorDisplay } from '@/components/ui/validation-error';
+import type { ValidationError } from '@/types/profile';
+interface PersonalInfoProps {
+  validationErrors?: ValidationError[];
+}
+
+function PersonalInfo({ validationErrors = [] }: PersonalInfoProps) {
   const [bio, setBio] = useState('');
   const { profile, setProfile } = useProfile();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,9 +48,8 @@ function PersonalInfo() {
       <h1 className='font-semibold'>Profile Picture</h1>
       <div className='flex flex-col items-center justify-center gap-4'>
         <div
-          className={`w-32 h-32 border-dashed relative border-2 rounded-full flex items-center justify-center cursor-pointer hover:border-primary ${
-            profile.image ? 'border-none' : ''
-          }`}
+          className={`w-32 h-32 border-dashed relative border-2 rounded-full flex items-center justify-center cursor-pointer hover:border-primary ${profile.image ? 'border-none' : ''
+            }`}
         >
           {profile.image ? (
             <div className=''>
@@ -101,17 +106,20 @@ function PersonalInfo() {
         onChange={(e) =>
           setProfile((prev) => ({ ...prev, name: e.target.value }))
         }
+        className={validationErrors.some(e => e.field === 'name') ? 'border-destructive' : ''}
       />
+      <ValidationErrorDisplay errors={validationErrors} field="name" />
       <h1>Bio</h1>
       <div className='relative'>
         <Textarea
           placeholder='Please Tell us about yourself and what you are learning for'
-          className='h-20'
+          className={`h-20 ${validationErrors.some(e => e.field === 'bio') ? 'border-destructive' : ''}`}
           value={profile.bio}
           onChange={(e) => {
             handleBioInputChange(e);
           }}
         />
+        <ValidationErrorDisplay errors={validationErrors} field="bio" />
         <p className='absolute bottom-0 right-0 p-2 text-xs text-muted-foreground'>
           {bio.length}/300
         </p>

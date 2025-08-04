@@ -1,5 +1,7 @@
 import OptionSelector from '@/components/OptionSelector';
 import { useProfile } from '@/context/profileProvider';
+import { ValidationErrorDisplay } from '@/components/ui/validation-error';
+import type { ValidationError } from '@/types/profile';
 const workingStyles = [
   {
     id: 'collaborative',
@@ -98,7 +100,11 @@ const projectPreferences = [
   },
 ];
 
-function WorkingStyleSection() {
+interface WorkingStyleSectionProps {
+  validationErrors?: ValidationError[];
+}
+
+function WorkingStyleSection({ validationErrors = [] }: WorkingStyleSectionProps) {
   const { profile, setProfile } = useProfile();
   return (
     <section className='space-y-4'>
@@ -147,6 +153,7 @@ function WorkingStyleSection() {
         type='radio'
         className='flex flex-col gap-4'
       />
+      <ValidationErrorDisplay errors={validationErrors} />
     </section>
   );
 }

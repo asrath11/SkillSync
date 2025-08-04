@@ -6,6 +6,8 @@ import SkillBadge from '@/components/SkillBadge';
 import { useProfile } from '@/context/profileProvider';
 import { BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ValidationErrorDisplay } from '@/components/ui/validation-error';
+import type { ValidationError } from '@/types/profile';
 const skillsList = [
   'React',
   'Node.js',
@@ -24,10 +26,14 @@ type Skill = {
   level: number;
 };
 
-function SkillsSection() {
+interface SkillsSectionProps {
+  validationErrors?: ValidationError[];
+}
+
+function SkillsSection({ validationErrors = [] }: SkillsSectionProps) {
   const [search, setSearch] = useState('');
   const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
-  const { setProfile } = useProfile();
+  const { profile, setProfile } = useProfile();
 
   const filteredSkills = skillsList.filter(
     (skill) =>
@@ -98,7 +104,7 @@ function SkillsSection() {
         )}
       </div>
       {/* Added skills by button if selectedSkills empty */}
-      {selectedSkills.length === 0 && (
+      {profile.skills.length === 0 && (
         <div className='space-y-3 h-60 p-4 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center'>
           <BookOpen size={40} className='mx-auto text-muted-foreground' />
           <p className='text-center font-semibold text-lg'>No skills added yet</p>
@@ -152,11 +158,10 @@ function SkillsSection() {
                       key={level}
                       className={`w-9 h-9 flex items-center justify-center rounded-full
                     cursor-pointer transition-colors
-                    ${
-                      skillObj.level >= level
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted text-muted-foreground'
-                    }`}
+                    ${skillObj.level >= level
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-muted text-muted-foreground'
+                        }`}
                       onClick={() => handleSetLevel(skillObj.skill, level)}
                     >
                       {level}
@@ -168,6 +173,7 @@ function SkillsSection() {
           </div>
         </>
       )}
+      <ValidationErrorDisplay errors={validationErrors} field='skills' />
     </section>
   );
 }

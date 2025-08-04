@@ -1,26 +1,6 @@
 // context/ProfileContext.tsx
 import { createContext, useContext, useState } from 'react';
-type Skill = {
-  skill: string;
-  level: number;
-};
-type ProfileData = {
-  image: string;
-  name: string;
-  country: string;
-  city: string;
-  bio: string;
-  skills: Skill[];
-  learningGoals: string;
-  learningCategories: string[];
-  learningTimeFrame: string;
-  successCriteria: string;
-  availability: string[];
-  workingStyle: string;
-  preferredCommunication: string;
-  learningStyle: string;
-  projectPreference: string;
-};
+import type { ProfileData } from '../types/profile';
 
 type ProfileContextType = {
   profile: ProfileData;

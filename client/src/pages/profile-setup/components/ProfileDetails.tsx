@@ -6,6 +6,10 @@ import SkillsSection from './SkillsSection';
 import GoalsSection from './GoalsSection';
 import WorkingStyleSection from './WorkingStyle';
 import Availability from './Availability';
+import { useProfile } from '@/context/profileProvider';
+import { validateStep } from '@/lib/validation';
+import type { ValidationError } from '@/types/profile';
+
 const steps = [
   {
     id: 1,
@@ -46,23 +50,47 @@ const steps = [
 
 function ProfileDetails() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const { profile } = useProfile();
 
   const percentage = ((currentStep - 1) / (steps.length - 1)) * 100;
 
   const handleNext = () => {
+    // Validate current step before proceeding
+    const validation = validateStep(currentStep, profile);
+
+    if (!validation.isValid) {
+      setValidationErrors(validation.errors);
+      return;
+    }
+
+    // Clear validation errors if validation passes
+    setValidationErrors([]);
+
     if (currentStep < steps.length) {
       setCurrentStep((prev) => prev + 1);
     }
   };
 
   const handleBack = () => {
+    // Clear validation errors when going back
+    setValidationErrors([]);
+
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
     }
   };
 
   const handleSubmit = () => {
-    console.log('Form submitted');
+    // Validate the final step before submitting
+    const validation = validateStep(currentStep, profile);
+
+    if (!validation.isValid) {
+      setValidationErrors(validation.errors);
+      return;
+    }
+
+    console.log('Form submitted', profile);
     // Add your submit logic here
   };
 
@@ -74,7 +102,7 @@ function ProfileDetails() {
       <ProgressBar percentage={percentage} currentStep={currentStep} />
 
       <section>
-        <CurrentComponent />
+        <CurrentComponent validationErrors={validationErrors} />
       </section>
       <div className='border border-t-1'></div>
       <div className='flex justify-between'>

@@ -8,6 +8,7 @@ import WorkingStyleSection from './WorkingStyle';
 import Availability from './Availability';
 import { useProfile } from '@/context/profileProvider';
 import type { ProfileData } from '@/types/profile';
+import { normalizeProfileData } from '@/utils/normalizeProfileData';
 
 const steps = [
   {
@@ -79,6 +80,8 @@ function ProfileDetails() {
         return value && value.trim().length > 0;
       case 'projectPreference':
         return value && value.trim().length > 0;
+      case 'weeklyCommitment':
+        return value && value.trim().length > 0;
       default:
         return true;
     }
@@ -145,6 +148,9 @@ function ProfileDetails() {
         break;
 
       case 4: // Availability
+        if (!profile.timeCommitment) {
+          newErrors.timeCommitment = 'Time commitment is required';
+        }
         if (!profile.availability || profile.availability.length === 0) {
           newErrors.availability = 'At least one availability option is required';
         }
@@ -192,16 +198,16 @@ function ProfileDetails() {
 
   const handleSubmit = () => {
     if (!validateStep(currentStep)) return;
-
-    console.log('Form submitted', profile);
-    // Add your submit logic here
+    const normalizedProfile = normalizeProfileData(profile);
+    console.log(JSON.stringify(normalizedProfile, null, 2));
+    // Add your submit logic he
   };
 
   const current = steps[currentStep - 1];
   const CurrentComponent = current.component;
 
   return (
-    <section className='xl:min-w-5xl p-6 mb-10 bg-card rounded-2xl shadow-lg space-y-5'>
+    <section className='p-6 mb-10 bg-card rounded-2xl shadow-lg space-y-5'>
       <ProgressBar percentage={percentage} currentStep={currentStep} />
 
       <section>

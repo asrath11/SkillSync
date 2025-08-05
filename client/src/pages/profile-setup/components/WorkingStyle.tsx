@@ -1,7 +1,4 @@
 import OptionSelector from '@/components/OptionSelector';
-import { useProfile } from '@/context/profileProvider';
-import { ValidationErrorDisplay } from '@/components/ui/validation-error';
-import type { ValidationError } from '@/types/profile';
 const workingStyles = [
   {
     id: 'collaborative',
@@ -106,7 +103,11 @@ interface WorkingStyleSectionProps {
   onUpdate: (stepData: Record<string, any>) => void;
 }
 
-function WorkingStyleSection({ data, errors, onUpdate }: WorkingStyleSectionProps) {
+function WorkingStyleSection({
+  data,
+  errors,
+  onUpdate,
+}: WorkingStyleSectionProps) {
   return (
     <section className='space-y-4'>
       <h1 className='text-2xl font-semibold text-center'>
@@ -125,16 +126,16 @@ function WorkingStyleSection({ data, errors, onUpdate }: WorkingStyleSectionProp
         toggleOption={(label) => onUpdate({ workingStyle: label })}
         type='radio'
         className='flex flex-col gap-4'
+        error={errors.workingStyle}
       />
       <h1 className='text-md font-semibold'>Communication Preferences</h1>
       <OptionSelector
         options={communicationStyles}
         selectedOptions={data.preferredCommunication}
-        toggleOption={(label) =>
-          onUpdate({ preferredCommunication: label })
-        }
+        toggleOption={(label) => onUpdate({ preferredCommunication: label })}
         type='radio'
         className='flex flex-col gap-4'
+        error={errors.preferredCommunication}
       />
       <h1 className='text-md font-semibold'>Learning Styles</h1>
       <OptionSelector
@@ -143,24 +144,17 @@ function WorkingStyleSection({ data, errors, onUpdate }: WorkingStyleSectionProp
         toggleOption={(label) => onUpdate({ learningStyle: label })}
         type='radio'
         className='flex flex-col gap-4'
+        error={errors.learningStyle}
       />
       <h1 className='text-md font-semibold'>Project Preferences</h1>
       <OptionSelector
         options={projectPreferences}
         selectedOptions={data.projectPreference}
-        toggleOption={(label) =>
-          onUpdate({ projectPreference: label })
-        }
+        toggleOption={(label) => onUpdate({ projectPreference: label })}
         type='radio'
         className='flex flex-col gap-4'
+        error={errors.projectPreference}
       />
-      {Object.keys(errors).length > 0 && (
-        <div className="space-y-1">
-          {Object.entries(errors).map(([field, message]) => (
-            <p key={field} className="text-sm text-destructive">{message}</p>
-          ))}
-        </div>
-      )}
     </section>
   );
 }

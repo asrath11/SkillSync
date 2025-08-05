@@ -10,13 +10,17 @@ interface Option {
 interface SelectProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   options: Option[];
+  value?: string;
   variant?: 'default' | 'search';
   onChange?: (value: string) => void;
+  error?: string;
 }
 
 function Select({
+  value,
   options,
   onChange,
+  error,
   variant = 'default',
   ...props
 }: SelectProps) {
@@ -33,14 +37,16 @@ function Select({
         readOnly
         type='text'
         onClick={() => setOpen((prev) => !prev)}
-        value={selectedLabel}
+        value={value || selectedLabel}
+        onChange={(e) => onChange?.(e.target.value)}
         placeholder='Select an option'
         className='cursor-pointer'
       />
+      {error && <p className='text-red-500'>{error}</p>}
       <AppIcon
         name={`${open ? 'ChevronUp' : 'ChevronDown'}`}
         size={20}
-        className='absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none'
+        className='absolute right-2 top-3 -translate-y-1 pointer-events-none'
       />
       {open && (
         <div className='absolute top-full mt-1 w-full bg-card shadow-lg z-10 rounded-md border space-y-4 p-2'>
@@ -62,7 +68,6 @@ function Select({
               />
             </div>
           )}
-          {variant === 'search' && <div className='border'></div>}
           <ul>
             {options
               .filter((option) =>

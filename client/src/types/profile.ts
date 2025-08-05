@@ -15,6 +15,7 @@ export type ProfileData = {
   learningTimeFrame: string;
   successCriteria: string;
   availability: string[];
+  timeCommitment: string;
   workingStyle: string;
   preferredCommunication: string;
   learningStyle: string;
@@ -29,4 +30,4 @@ export interface ValidationError {
 export interface ValidationResult {
   isValid: boolean;
   errors: ValidationError[];
-} 
+}

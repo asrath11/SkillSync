@@ -22,6 +22,7 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
     learningTimeFrame: '',
     successCriteria: '',
     availability: [],
+    timeCommitment: '',
     workingStyle: '',
     preferredCommunication: '',
     learningStyle: '',

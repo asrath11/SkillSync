@@ -14,6 +14,7 @@ interface OptionSelectorProps {
   toggleOption: (label: string) => void;
   type: 'checkbox' | 'radio';
   className?: string;
+  error?: string;
 }
 
 function OptionSelector({
@@ -22,6 +23,7 @@ function OptionSelector({
   toggleOption,
   type,
   className,
+  error,
 }: OptionSelectorProps) {
   return (
     <div className={className}>
@@ -81,6 +83,7 @@ function OptionSelector({
           </div>
         );
       })}
+      {error && <p className='text-sm text-destructive'>{error}</p>}
     </div>
   );
 }

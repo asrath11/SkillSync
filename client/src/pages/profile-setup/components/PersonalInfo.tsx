@@ -110,21 +110,17 @@ function PersonalInfo({ data, errors, onUpdate }: PersonalInfoProps) {
         error={errors.name}
         placeholder='Enter your full name'
       />
-      <h1>Bio</h1>
-      <div className='relative'>
-        <Textarea
-          placeholder='Please Tell us about yourself and what you are learning for'
-          className={`h-20 ${errors.bio ? 'border-destructive' : ''}`}
-          value={data.bio}
-          onChange={(e) => {
-            handleBioInputChange(e);
-          }}
-        />
-        {errors.bio && <p className='text-sm text-destructive'>{errors.bio}</p>}
-        <p className='absolute bottom-0 right-0 p-2 text-xs text-muted-foreground'>
-          {bio.length}/300
-        </p>
-      </div>
+      <Textarea
+        placeholder='Please Tell us about yourself and what you are learning for'
+        label='Bio'
+        error={errors.bio}
+        className={`h-20 ${errors.bio ? 'border-destructive' : ''}`}
+        value={data.bio}
+        onChange={(e) => {
+          handleBioInputChange(e);
+        }}
+      />
+      <p className='text-right text-sm text-muted-foreground'>{bio.length}/300</p>
       <div className='xl:flex gap-4 space-y-4 xl:space-y-0'>
         <div className='flex flex-col gap-2 flex-1'>
           <h1>City</h1>

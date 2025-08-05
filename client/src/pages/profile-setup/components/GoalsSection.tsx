@@ -1,7 +1,7 @@
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import OptionSelector from '@/components/OptionSelector';
 import type { ProfileData } from '@/types/profile';
+import { cn } from '@/lib/utils';
 
 const categories = [
   {
@@ -94,11 +94,11 @@ function GoalsSection({ data, errors, onUpdate }: GoalsSectionProps) {
       </div>
 
       <div className='flex flex-col space-y-4'>
-        <Label htmlFor='short-term-goals' className='font-semibold'>
-          Describe your learning goals <span className='text-red-500'>*</span>
-        </Label>
         <Textarea
           id='short-term-goals'
+          label='Describe your learning goals'
+          required
+          error={errors.learningGoals}
           value={data.learningGoals || ''}
           maxLength={300}
           onChange={(e) => onUpdate({ ...data, learningGoals: e.target.value })}
@@ -124,6 +124,7 @@ function GoalsSection({ data, errors, onUpdate }: GoalsSectionProps) {
         toggleOption={toggleCategory}
         className='grid lg:grid-cols-2 gap-4'
         type='checkbox'
+        error={errors.learningCategories}
       />
       <div className='space-y-2'>
         <h1 className='font-semibold'>
@@ -160,30 +161,26 @@ function GoalsSection({ data, errors, onUpdate }: GoalsSectionProps) {
           </label>
         ))}
       </div>
+      {errors.learningTimeFrame && (
+        <p className='text-sm text-destructive'>{errors.learningTimeFrame}</p>
+      )}
       <div className='flex flex-col space-y-4'>
-        <Label htmlFor='short-term-goals' className='font-semibold'>
-          How will you measure success? (Optional)
-        </Label>
         <Textarea
           id='short-term-goals'
+          label='How will you measure success?'
           value={data.successCriteria || ''}
           maxLength={300}
+          error={errors.successCriteria}
           onChange={(e) => onUpdate({ ...data, successCriteria: e.target.value })}
-          className='min-h-[120px]'
+          className={cn(
+            'min-h-[120px]',
+            errors.successCriteria && 'border-red-500'
+          )}
         />
         <p className='text-right text-sm text-muted-foreground'>
           {(data.successCriteria || '').length}/300
         </p>
       </div>
-      {Object.keys(errors).length > 0 && (
-        <div className='space-y-1'>
-          {Object.entries(errors).map(([field, message]) => (
-            <p key={field} className='text-sm text-destructive'>
-              {message}
-            </p>
-          ))}
-        </div>
-      )}
     </section>
   );
 }

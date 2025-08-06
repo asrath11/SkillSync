@@ -9,6 +9,7 @@ const userProfileSchema = new Schema(
       required: true,
       index: true,
     },
+    fullName: { type: String, trim: true },
     profilePicture: {
       type: String,
       default: 'https://cdn-icons-png.flaticon.com/512/149/149071.png',
@@ -16,11 +17,15 @@ const userProfileSchema = new Schema(
     bio: { type: String, trim: true },
     city: { type: String, trim: true },
     country: { type: String, trim: true },
-    skills: {
-      type: [String],
-      set: (skills) =>
-        Array.isArray(skills) ? skills.map((s) => s.trim().toLowerCase()) : [],
-    },
+    skills: [
+      {
+        skill: { type: String, trim: true },
+        level: {
+          type: Number,
+          trim: true,
+        },
+      },
+    ],
     learningGoals: { type: String, trim: true },
     learningCategories: { type: [String] },
     learningTimeFrame: { type: String, trim: true },
@@ -41,10 +46,10 @@ const userProfileSchema = new Schema(
     learningStyle: {
       type: String,
       enum: [
-        'visual',
+        'visual learner',
         'hands-on learner',
-        'discussion based',
-        'reading and research',
+        'discussion-based',
+        'reading & research',
       ],
       required: true,
     },

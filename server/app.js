@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import connectDB from './connectDb.js';
 import authRoute from './routes/authRoute.js';
+import profileRoute from './routes/profileRoute.js';
+
 dotenv.config();
 connectDB();
 
@@ -26,6 +28,8 @@ app.use(express.json());
 
 //routes
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/profile', profileRoute);
+
 app.get('/api/v1', (req, res) => {
   res.send('Hello World!');
 });

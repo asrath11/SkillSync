@@ -3,11 +3,6 @@ const { Schema } = mongoose;
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 const userSchema = new Schema({
-  fullName: {
-    type: String,
-    required: true,
-    minLength: [6, 'Full name must be at least 6 characters long'],
-  },
   email: {
     type: String,
     required: true,

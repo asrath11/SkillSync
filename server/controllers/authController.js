@@ -18,12 +18,12 @@ const setTokenCookie = (res, token) => {
 };
 
 export const signup = asyncHandler(async (req, res) => {
-  const { fullName, email, password, confirmPassword } = req.body;
+  const { email, password, confirmPassword } = req.body;
   if (password !== confirmPassword) {
     return res.status(400).json({ message: 'Passwords do not match' });
   }
 
-  if (!fullName || !email || !password || !confirmPassword) {
+  if ( !email || !password || !confirmPassword) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
@@ -33,7 +33,6 @@ export const signup = asyncHandler(async (req, res) => {
   }
 
   const newUser = await User.create({
-    fullName,
     email,
     password,
     confirmPassword,
@@ -46,7 +45,6 @@ export const signup = asyncHandler(async (req, res) => {
     message: 'User created successfully',
     user: {
       id: newUser._id,
-      fullName: newUser.fullName,
       email: newUser.email,
     },
     token,
@@ -77,7 +75,6 @@ export const signin = asyncHandler(async (req, res) => {
     message: 'User signed in successfully',
     user: {
       id: user._id,
-      fullName: user.fullName,
       email: user.email,
     },
     token,

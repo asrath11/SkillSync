@@ -7,9 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { signin } from '@/api/auth';
 import { useAuth } from '@/context/authProvider';
+import { getUserProfile } from '@/api/profile';
+import { useProfile } from '@/context/profileProvider';
 function SignIn() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
+  const { setProfile } = useProfile();
   const schema = z.object({
     email: z.email(),
     password: z.string().min(6),
@@ -28,6 +31,8 @@ function SignIn() {
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
       const response = await signin(data);
+      const profile = await getUserProfile();
+      setProfile(profile);
       setUser(response);
       navigate('/');
     } catch (error: any) {

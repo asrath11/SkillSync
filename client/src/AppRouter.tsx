@@ -12,6 +12,9 @@ import NotFound from './pages/NotFound';
 import SignUp from './pages/sign-up';
 import SignIn from './pages/sign-in';
 import ProfileSetup from './pages/profile-setup';
+import ProfileMatch from './pages/profile-match';
+import CompletionCelebration from './pages/profile-setup/components/CompletionCelebration';
+import Protect from './middleware/Protect';
 
 //context providers
 import { AuthProvider } from './context/authProvider';
@@ -22,9 +25,33 @@ const router = createBrowserRouter(
     <>
       <Route path='/' element={<Layout />}>
         <Route index element={<LandingPage />} />
-        <Route path='/profile-setup' element={<ProfileSetup />} />
+        <Route
+          path='/profile-setup'
+          element={
+            <Protect>
+              <ProfileSetup />
+            </Protect>
+          }
+        />
+        <Route
+          path='/profile-match'
+          element={
+            <Protect>
+              <ProfileMatch />
+            </Protect>
+          }
+        />
         <Route path='*' element={<NotFound />} />
       </Route>
+      <Route
+        path='/profile-complete'
+        element={
+          <Protect>
+            <CompletionCelebration />
+          </Protect>
+        }
+      />
+
       <Route path='/sign-up' element={<SignUp />} />
       <Route path='/sign-in' element={<SignIn />} />
     </>

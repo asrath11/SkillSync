@@ -10,9 +10,10 @@ export function normalizeProfileData(profile: ProfileData): ProfileData {
     learningCategories: profile.learningCategories.map((c) => c.toLowerCase()),
     learningTimeFrame: profile.learningTimeFrame.toLowerCase(),
     timeCommitment: profile.timeCommitment.toLowerCase(),
-    skills: profile.skills.map((s) =>
-      typeof s === 'string' ? s.toLowerCase() : s
-    ),
+    skills: profile.skills.map((s) => ({
+      skill: s.skill.toLowerCase(),
+      level: Number(s.level),
+    })),
     availability: profile.availability.map((slot) => slot.toLowerCase()),
   };
 }

@@ -1,6 +1,7 @@
 // context/ProfileContext.tsx
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import type { ProfileData } from '../types/profile';
+import { getUserProfile } from '../api/profile';
 
 type ProfileContextType = {
   profile: ProfileData;
@@ -10,9 +11,11 @@ type ProfileContextType = {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileProvider = ({ children }: { children: React.ReactNode }) => {
+  const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<ProfileData>({
-    image: '',
-    name: '',
+    userId: '',
+    profilePicture: '',
+    fullName: '',
     country: '',
     city: '',
     bio: '',
@@ -28,6 +31,22 @@ export const ProfileProvider = ({ children }: { children: React.ReactNode }) => 
     learningStyle: '',
     projectPreference: '',
   });
+
+  const fetchProfile = async () => {
+    try {
+      const profile = await getUserProfile();
+      setLoading(true);
+      setProfile(profile);
+    } catch (error) {
+      console.error('Failed to fetch profile', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   return (
     <ProfileContext.Provider value={{ profile, setProfile }}>

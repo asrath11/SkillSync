@@ -13,11 +13,9 @@ function ProfileSetup() {
 
         {/* Sidebar - Preview & Tips */}
         <div className='flex flex-col gap-6 xl:gap-8 w-full xl:max-w-md 2xl:max-w-lg'>
-          <div className='sticky top-4'>
-            <ProfileView />
-            <div className='mt-6 xl:mt-8'>
-              <ProfileTips />
-            </div>
+          <ProfileView />
+          <div className='mt-6 xl:mt-8'>
+            <ProfileTips />
           </div>
         </div>
       </div>

@@ -25,14 +25,14 @@ function PersonalInfo({ data, errors, onUpdate }: PersonalInfoProps) {
       reader.onload = (event) => {
         const result = event.target?.result;
         if (result) {
-          onUpdate({ ...data, image: result as string });
+          onUpdate({ ...data, profilePicture: result as string });
         }
       };
       reader.readAsDataURL(file);
     }
   };
   const removeImage = () => {
-    onUpdate({ ...data, image: '' });
+    onUpdate({ ...data, profilePicture: '' });
   };
   const handleBioInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -53,13 +53,13 @@ function PersonalInfo({ data, errors, onUpdate }: PersonalInfoProps) {
       <div className='flex flex-col items-center justify-center gap-4'>
         <div
           className={`w-32 h-32 border-dashed relative border-2 rounded-full flex items-center justify-center cursor-pointer hover:border-primary ${
-            data.image ? 'border-none' : ''
+            data.profilePicture ? 'border-none' : ''
           }`}
         >
-          {data.image ? (
+          {data.profilePicture ? (
             <div className=''>
               <img
-                src={data.image}
+                src={data.profilePicture}
                 alt='Profile'
                 className='w-full h-full object-cover rounded-full absolute top-0 left-0'
               />
@@ -102,12 +102,12 @@ function PersonalInfo({ data, errors, onUpdate }: PersonalInfoProps) {
         </p>
       </div>
       <Input
-        name='name'
+        name='fullName'
         label='Full Name'
         required={true}
-        value={data.name || ''}
+        value={data.fullName || ''}
         onChange={handleInputChange}
-        error={errors.name}
+        error={errors.fullName}
         placeholder='Enter your full name'
       />
       <Textarea
@@ -135,6 +135,7 @@ function PersonalInfo({ data, errors, onUpdate }: PersonalInfoProps) {
           <h1>Country</h1>
           <Input
             placeholder='Country'
+            name='country'
             value={data.country}
             onChange={handleInputChange}
           />

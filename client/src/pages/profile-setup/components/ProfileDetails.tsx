@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Button } from '@/components/ui/button';
 import ProgressBar from './ProgressBar';
 import PersonalInfo from './PersonalInfo';
@@ -6,9 +8,12 @@ import SkillsSection from './SkillsSection';
 import GoalsSection from './GoalsSection';
 import WorkingStyleSection from './WorkingStyle';
 import Availability from './Availability';
-import { useProfile } from '@/context/profileProvider';
 import type { ProfileData } from '@/types/profile';
+import { useProfile } from '@/context/profileProvider';
+import { useAuth } from '@/context/authProvider';
 import { normalizeProfileData } from '@/utils/normalizeProfileData';
+import { updateUserProfile } from '@/api/profile';
+import { getUserProfile } from '@/api/profile';
 
 const steps = [
   {
@@ -49,7 +54,9 @@ const steps = [
 ];
 
 function ProfileDetails() {
+  const { user } = useAuth();
   const { profile, setProfile } = useProfile();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -112,10 +119,10 @@ function ProfileDetails() {
 
     switch (step) {
       case 1: // Personal Info
-        if (!profile.name?.trim()) {
-          newErrors.name = 'Full name is required';
-        } else if (profile.name.trim().length < 4) {
-          newErrors.name = 'Full name must be at least 4 characters';
+        if (!profile.fullName?.trim()) {
+          newErrors.fullName = 'Full name is required';
+        } else if (profile.fullName.trim().length < 4) {
+          newErrors.fullName = 'Full name must be at least 4 characters';
         }
         if (profile.bio && profile.bio.length < 10) {
           newErrors.bio = 'Bio must be at least 10 characters';
@@ -196,11 +203,15 @@ function ProfileDetails() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateStep(currentStep)) return;
+    setProfile({
+      ...profile,
+      userId: user?.id || '',
+    });
     const normalizedProfile = normalizeProfileData(profile);
-    console.log(JSON.stringify(normalizedProfile, null, 2));
-    // Add your submit logic he
+    await updateUserProfile(normalizedProfile);
+    navigate('/profile-complete');
   };
 
   const current = steps[currentStep - 1];

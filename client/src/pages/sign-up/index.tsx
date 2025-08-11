@@ -8,14 +8,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { signup } from '@/api/auth';
 import { useAuth } from '@/context/authProvider';
+import { useProfile } from '@/context/profileProvider';
+import { getUserProfile } from '@/api/profile';
 function Signup() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
+  const { setProfile } = useProfile();
   const schema = z
     .object({
-      fullName: z
-        .string()
-        .min(3, { message: 'Full name must be at least 3 characters long' }),
       email: z.email(),
       password: z
         .string()
@@ -39,9 +39,11 @@ function Signup() {
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
+      const profile = await getUserProfile();
       const response = await signup(data);
       console.log(response);
       setUser(response);
+      setProfile(profile);
       navigate('/');
     } catch (error: any) {
       if (error.response?.data?.message) {
@@ -75,14 +77,6 @@ function Signup() {
           </p>
 
           <form className='space-y-4' onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              type='text'
-              placeholder='Full Name'
-              {...register('fullName')}
-            />
-            {errors.fullName && (
-              <p className='text-red-500'>{errors.fullName.message}</p>
-            )}
             <Input
               type='email'
               placeholder='Email Address'

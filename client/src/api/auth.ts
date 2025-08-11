@@ -6,7 +6,6 @@ interface signinData {
   password: string;
 }
 interface signupData extends signinData {
-  fullName: string;
   confirmPassword: string;
 }
 

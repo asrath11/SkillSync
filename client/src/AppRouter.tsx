@@ -19,6 +19,7 @@ import Protect from './middleware/Protect';
 //context providers
 import { AuthProvider } from './context/authProvider';
 import { ProfileProvider } from './context/profileProvider';
+import Chat from './pages/chat';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -48,6 +49,14 @@ const router = createBrowserRouter(
         element={
           <Protect>
             <CompletionCelebration />
+          </Protect>
+        }
+      />
+      <Route
+        path='/chat'
+        element={
+          <Protect>
+            <Chat />
           </Protect>
         }
       />

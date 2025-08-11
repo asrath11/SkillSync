@@ -28,10 +28,12 @@ function OptionSelector({
   return (
     <div className={className}>
       {options.map(({ id, title, description, icon }) => {
+        const lowerCaseTitle = title.toLowerCase();
         const isSelected = Array.isArray(selectedOptions)
-          ? selectedOptions.includes(title)
-          : selectedOptions === title;
-
+          ? selectedOptions
+              .map((option) => option.toLowerCase().includes(lowerCaseTitle))
+              .includes(true)
+          : selectedOptions.toLowerCase() === lowerCaseTitle;
         return (
           <div
             key={id}
@@ -40,7 +42,7 @@ function OptionSelector({
                 ? 'border-primary bg-primary/10'
                 : 'border-gray-100 dark:border-black/25'
             }`}
-            onClick={() => toggleOption(title)}
+            onClick={() => toggleOption(lowerCaseTitle)}
           >
             {icon && (
               <Icon
@@ -63,7 +65,7 @@ function OptionSelector({
                 id={id}
                 className='w-5 h-5 cursor-pointer'
                 checked={isSelected}
-                onCheckedChange={() => toggleOption(title)}
+                onCheckedChange={() => toggleOption(lowerCaseTitle)}
                 onClick={(e) => e.stopPropagation()}
               />
             )}
@@ -74,7 +76,7 @@ function OptionSelector({
                   type='radio'
                   className='w-5 h-5 cursor-pointer peer hidden'
                   checked={isSelected}
-                  onChange={() => toggleOption(title)}
+                  onChange={() => toggleOption(lowerCaseTitle)}
                   onClick={(e) => e.stopPropagation()}
                 />
                 <div className='w-5 h-5 cursor-pointer rounded-full peer-checked:bg-primary'></div>

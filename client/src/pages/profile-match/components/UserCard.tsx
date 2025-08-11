@@ -150,7 +150,7 @@ export function UserCard({ profile, onConnect, onMessage }: UserCardProps) {
           size='lg'
           className='flex-1'
           onClick={() => {
-            navigate('/chat', { state: { profileId: profile.userId } });
+            navigate('/chat', { state: { userId: profile.userId } });
           }}
         >
           <MessageCircle className='size-4 mr-2' />

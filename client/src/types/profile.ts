@@ -4,8 +4,9 @@ export type Skill = {
 };
 
 export type ProfileData = {
-  image: string;
-  name: string;
+  userId?: string;
+  profilePicture: string;
+  fullName: string;
   country: string;
   city: string;
   bio: string;
@@ -21,13 +22,3 @@ export type ProfileData = {
   learningStyle: string;
   projectPreference: string;
 };
-
-export interface ValidationError {
-  field: string;
-  message: string;
-}
-
-export interface ValidationResult {
-  isValid: boolean;
-  errors: ValidationError[];
-}

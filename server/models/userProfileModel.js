@@ -8,6 +8,7 @@ const userProfileSchema = new Schema(
       ref: 'User',
       required: true,
       index: true,
+      unique: true,
     },
     fullName: { type: String, trim: true },
     profilePicture: {

@@ -1,10 +1,9 @@
 import express from 'express';
-import { 
-  getProfile, 
-  updateProfile, 
-  getMatchingProfiles,
-  getProfileById,
-  connectWithUser 
+import {
+  getProfile,
+  updateProfile,
+  getAllProfiles,
+  getProfileByUserId,
 } from '../controllers/profileController.js';
 import { verifyToken } from '../middlewares/verify.js';
 
@@ -14,16 +13,12 @@ const router = express.Router();
 router.use(verifyToken);
 
 // Get and update user's own profile
-router.get('/', getProfile);
-router.post('/', updateProfile);
+router.route('/').get(getProfile).post(updateProfile);
 
-// Get matching profiles
-router.get('/matches', getMatchingProfiles);
+// Get all profiles
+router.get('/all', getAllProfiles);
 
 // Get specific profile by ID
-router.get('/:profileId', getProfileById);
-
-// Connect with another user
-router.post('/connect/:profileId', connectWithUser);
+router.get('/:userId', getProfileByUserId);
 
 export default router;

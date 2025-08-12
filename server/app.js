@@ -7,11 +7,17 @@ import dotenv from 'dotenv';
 import connectDB from './connectDb.js';
 import authRoute from './routes/authRoute.js';
 import profileRoute from './routes/profileRoute.js';
+import messageRoute from './routes/messageRoute.js';
 
+import { socketSetup } from './utils/socket.js';
+import http from 'http';
 dotenv.config();
 connectDB();
 
 const app = express();
+const server = http.createServer(app);
+
+socketSetup(server);
 
 //Middleware
 app.use(
@@ -29,12 +35,13 @@ app.use(express.json());
 //routes
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/profile', profileRoute);
+app.use('/api/v1/message', messageRoute);
 
 app.get('/api/v1', (req, res) => {
   res.send('Hello World!');
 });
 
 //server
-app.listen(process.env.PORT || 3000, () => {
+server.listen(process.env.PORT || 3000, () => {
   console.log('Server is running on port http://localhost:3000');
 });

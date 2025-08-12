@@ -91,3 +91,8 @@ export const signout = asyncHandler(async (req, res) => {
 
   res.status(200).json({ message: 'User signed out successfully' });
 });
+
+export const getAllUsers = asyncHandler(async (_req, res) => {
+  const users = await User.find();
+  res.status(200).json(users);
+});
